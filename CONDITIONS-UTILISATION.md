@@ -26,7 +26,7 @@ Le compte Naïolle est lié uniquement à son adresse e-mail : il n'existe ni mo
 
 ## 7. Application, Premium et garantie
 
-Naïolle Player est utilisable gratuitement. Naïolle Premium (application téléphone) débloque des fonctions supplémentaires. L'application est fournie « en l'état », sans garantie de fonctionnement avec tous les fournisseurs, tous les formats ou tous les appareils. Les éditeurs ne pourront être tenus responsables d'un dommage résultant de son utilisation.
+L'application Naïolle Player (tous supports confondus) est utilisable gratuitement. Naïolle Premium, attaché au compte Naïolle, débloque des fonctions supplémentaires sur le téléphone et sur la TV. L'application est fournie « en l'état », sans garantie de fonctionnement avec tous les fournisseurs, tous les formats ou tous les appareils. Les éditeurs ne pourront être tenus responsables d'un dommage résultant de son utilisation.
 
 ## 8. Enregistrements : usage strictement privé
 
