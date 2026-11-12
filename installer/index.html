@@ -25,6 +25,15 @@
   h2 { font-size:17px; margin:0 0 8px; color:var(--amber); }
   .tag { display:inline-block; font-size:12px; padding:3px 10px; border-radius:10px; border:1px solid var(--line); color:var(--dim); margin-bottom:10px; }
   footer { color:var(--dim); font-size:12px; margin-top:8px; }
+  .alert { background:#2a0f14; border:2px solid var(--coral); border-radius:22px; padding:20px 18px; text-align:left; margin-bottom:16px; }
+  .alert h2 { color:#FF8A7A; font-size:19px; }
+  .alert p { color:var(--text); margin:6px 0; }
+  .alert ol li { margin-bottom:10px; }
+  .no { color:#FF8A7A; font-weight:bold; }
+  .yes { color:#7CE38B; font-weight:bold; }
+  .mail { background:#2a1d08; border:2px solid var(--amber); border-radius:22px; padding:18px; text-align:left; margin-bottom:16px; }
+  .mail h2 { font-size:19px; }
+  .mail p { color:var(--text); margin:6px 0; }
   footer a { color:var(--dim); }
 </style>
 </head>
@@ -40,11 +49,29 @@
       <li><b>Téléphone ou tablette</b> : Android 8 ou plus récent (à peu près tous les appareils sortis depuis 2018). Pour vérifier : <b>Paramètres › À propos du téléphone › Version d'Android</b>.</li>
       <li><b>Télé, box Android TV, Google TV</b> : Android TV 8 ou plus récent.</li>
       <li><b>Fire TV (Amazon)</b> : Fire OS 7 ou plus récent. Pour vérifier : <b>Paramètres › Ma Fire TV › À propos</b>.</li>
-      <li><b>iPhone, iPad, Apple TV, Samsung (Tizen), LG (webOS)</b> : pas compatible pour le moment.</li>
+      <li><b>iPhone, iPad, Apple TV, Samsung (Tizen), LG (webOS)</b> : pas d'appli pour le moment.</li>
+      <li><b>TV Samsung, LG…</b> : tu peux quand même y regarder Naïolle depuis ton téléphone Android, avec la <b>recopie d'écran</b> (Smart View, Screen Mirroring), si ta TV la propose.</li>
     </ol>
     <p style="margin:8px 0 0">En dessous, Naïolle ne s'installera pas. Le Premium ne s'achète que depuis l'appli, après les <b>48 h d'essai gratuit</b> : tu peux donc tout essayer sur ton appareil avant de payer quoi que ce soit.</p>
     <p style="margin:8px 0 0">🔒 <b>Activité déclarée en France.</b> Le paiement est <b>sécurisé par Stripe</b> : Naïolle ne voit jamais ta carte bancaire. Naïolle s'installe directement depuis ce site, sans passer par le Play Store, et se met à jour toute seule depuis l'appli.</p>
     <p style="margin:8px 0 0">📥 <b>Le téléchargement reste bloqué à la fin ?</b> Le fichier est souvent déjà arrivé : ouvre ton <b>Gestionnaire de fichiers › Téléchargements</b> et touche le fichier Naïolle. Sinon, ouvre <b>Chrome par son icône</b> (pas depuis Telegram ni la barre de recherche Google) et reviens sur cette page.</p>
+  </div>
+
+  <div class="alert">
+    <h2>🛑 Important : Android va dire que l'appli est dangereuse</h2>
+    <p>C'est <b>normal</b> : Naïolle s'installe sans passer par le Play Store, alors Android (Play Protect) affiche un avertissement du type <b>« Appli bloquée »</b> ou <b>« Appli dangereuse »</b>. Naïolle n'est pas dangereux.</p>
+    <ol>
+      <li><span class="no">Ne touche pas « OK »</span> : ça annule l'installation.</li>
+      <li>Touche <b>« Plus de détails »</b> : la <b>petite flèche ⌄</b> sous le message.</li>
+      <li>Touche <span class="yes">« Installer quand même »</span>.</li>
+      <li>Si Android propose d'<b>analyser l'appli</b>, tu peux accepter : l'analyse la laisse passer.</li>
+    </ol>
+    <p>🔁 <b>Ce message peut revenir à chaque mise à jour</b> : fais pareil, « Plus de détails » puis « Installer quand même ».</p>
+  </div>
+
+  <div class="mail">
+    <h2>📩 Le code par e-mail arrive souvent dans les SPAMS</h2>
+    <p>Pour créer ton compte, Naïolle t'envoie un code à 6 chiffres. <b>Pas de message au bout d'une minute ? Regarde dans tes spams (courrier indésirable)</b>, puis marque-le « Ce n'est pas un spam ».</p>
   </div>
 
   <div class="card">
@@ -59,15 +86,15 @@
     <ol>
       <li>Appuie sur <b>Télécharger Naïolle</b>, puis ouvre le fichier téléchargé (dans la notification ou dans <b>Fichiers › Téléchargements</b>).</li>
       <li>Android demande d'<b>autoriser l'installation</b> depuis ton navigateur : appuie sur <b>Paramètres</b>, active l'interrupteur, puis reviens en arrière.</li>
-      <li>Appuie sur <b>Installer</b>. Si Play Protect affiche un avertissement, choisis <b>Plus de détails › Installer quand même</b> : Naïolle n'est simplement pas (encore) sur le Play Store.</li>
-      <li>Ouvre Naïolle, accepte les conditions, puis <b>crée ton compte</b> avec ton adresse e-mail : tu reçois un code à 6 chiffres.</li>
+      <li>Appuie sur <b>Installer</b>. Android dit que l'appli est dangereuse ? <span class="no">Pas « OK »</span> : touche la <b>petite flèche « Plus de détails »</b>, puis <span class="yes">« Installer quand même »</span>.</li>
+      <li>Ouvre Naïolle, accepte les conditions, puis <b>crée ton compte</b> avec ton adresse e-mail : tu reçois un code à 6 chiffres, <b>souvent dans les spams</b>.</li>
       <li>Ajoute ton abonnement IPTV (codes Xtream ou lien M3U). Tu profites de <b>48 h d'essai Premium</b>.</li>
     </ol>
   </div>
 
   <div class="card">
     <h2>Les mises à jour</h2>
-    <p style="margin:0">Pas besoin de revenir ici : Naïolle se met à jour tout seul, depuis l'appli (une bannière s'affiche en haut de l'accueil).</p>
+    <p style="margin:0">Pas besoin de revenir ici : Naïolle se met à jour tout seul, depuis l'appli (une bannière s'affiche en haut de l'accueil). Si Android affiche de nouveau l'avertissement, fais comme à l'installation : <b>« Plus de détails »</b> puis <b>« Installer quand même »</b>.</p>
   </div>
 
   <footer>Naïolle est un lecteur : il ne fournit aucune chaîne ni aucun contenu.<br>
