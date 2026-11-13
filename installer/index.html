@@ -41,7 +41,11 @@
 <main>
   <img src="zygo_head.png" alt="Naïolle">
   <h1>Naïolle Player</h1>
-  <p>Tes chaînes, films et séries avec ton abonnement IPTV, dans une appli joyeuse et simple.<br>Pour téléphones et tablettes Android.</p>
+  <p>Tes chaînes, films et séries avec ton abonnement IPTV, dans une appli joyeuse et simple.<br>Pour téléphones, tablettes et TV Android.</p>
+  <div style="display:flex;gap:12px;margin:0 0 18px">
+    <a href="#telephone" style="flex:1;display:block;padding:16px 8px;border-radius:16px;border:1px solid #FFB547;color:#FFF3EA;text-decoration:none;font-weight:bold;font-size:17px;text-align:center">📱 Sur mon téléphone</a>
+    <a href="#tv" style="flex:1;display:block;padding:16px 8px;border-radius:16px;border:1px solid #FFB547;color:#FFF3EA;text-decoration:none;font-weight:bold;font-size:17px;text-align:center">📺 Sur ma TV</a>
+  </div>
 
   <div class="card">
     <h2>⚠️ Avant de télécharger : ton appareil est-il compatible ?</h2>
@@ -81,8 +85,8 @@
       <a href="https://github.com/naiolle-player/naiolle-player.github.io/releases/latest/download/Naiolle-Player-universal.apk">Version pour tous les téléphones</a> (plus lourde).</span>
   </div>
 
-  <div class="card">
-    <h2>Installer en 1 minute</h2>
+  <div class="card" id="telephone">
+    <h2>📱 Sur le téléphone : installer en 1 minute</h2>
     <ol>
       <li>Appuie sur <b>Télécharger Naïolle</b>, puis ouvre le fichier téléchargé (dans la notification ou dans <b>Fichiers › Téléchargements</b>).</li>
       <li>Android demande d'<b>autoriser l'installation</b> depuis ton navigateur : appuie sur <b>Paramètres</b>, active l'interrupteur, puis reviens en arrière.</li>
@@ -90,6 +94,17 @@
       <li>Ouvre Naïolle, accepte les conditions, puis <b>crée ton compte</b> avec ton adresse e-mail : tu reçois un code à 6 chiffres, <b>souvent dans les spams</b>.</li>
       <li>Ajoute ton abonnement IPTV (codes Xtream ou lien M3U). Tu profites de <b>48 h d'essai Premium</b>.</li>
     </ol>
+  </div>
+
+  <div class="card" id="tv">
+    <h2>📺 Sur ma TV (Google TV, Android TV, Fire TV)</h2>
+    <ol>
+      <li>Sur la TV, installe <b>« Downloader » de AFTVnews</b> (icône orange, Play Store de la TV ou Appstore des Fire TV) et tape ce code :<br><span style="display:inline-block;margin-top:6px;padding:8px 16px;border-radius:12px;border:1px dashed #FFB547;color:#FFB547;font-weight:bold;font-size:26px;letter-spacing:4px">5496308</span><br>Pas de Downloader ? Tape dans le <b>navigateur de la TV</b> :<br><span style="display:inline-block;margin-top:6px;padding:8px 14px;border-radius:12px;border:1px dashed #FFB547;color:#FFB547;font-weight:bold;font-size:18px">naiolle-player.github.io/t</span></li>
+      <li>Ouvre Naïolle sur la TV : un <b>QR code</b> s'affiche. Scanne-le avec l'<b>appareil photo de n'importe quel téléphone</b> (pas besoin d'installer quoi que ce soit dessus). Pas de téléphone ? Connecte-toi avec la télécommande : ton adresse e-mail, puis le code reçu.</li>
+      <li>C'est fini. Le Premium s'achète aussi depuis la TV : un QR code de paiement s'affiche, la TV se débloque toute seule.</li>
+    </ol>
+    <p style="margin:8px 0 0"><b>La TV refuse d'installer ?</b> C'est normal, il faut l'autoriser une seule fois. <b>Google TV</b> : Paramètres › Système › À propos, clique 7 fois sur « Build ». Puis Paramètres › Applis › Sécurité › Sources inconnues : active Downloader (ou ton navigateur). <b>Fire TV</b> : Paramètres › Ma Fire TV › À propos, clique 7 fois sur le nom de l'appareil, puis Options pour les développeurs › Installer des applis inconnues : active Downloader.</p>
+    <p style="margin:8px 0 0">TV Samsung ou LG : regarde Naïolle depuis ton téléphone avec l'icône TV du lecteur, ou branche une clé Google TV ou un Fire TV Stick.</p>
   </div>
 
   <div class="card">
