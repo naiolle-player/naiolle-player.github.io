@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Naïolle Player</title>
+<script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+<style>
+  @font-face { font-family: ZygoFairy; src: url("zygo_title_black.ttf"); }
+  @font-face { font-family: ZygoText; src: url("zygo_text.ttf"); }
+  html, body { margin: 0; height: 100%; background: #0C0810; overflow: hidden; font-family: ZygoText, sans-serif; }
+  cast-media-player {
+    --theme-hue: 20;
+    --progress-color: #FF7A3D;
+    --background-color: #0C0810;
+    --splash-image: url("zygo_head.png");
+    --splash-size: 30%;
+    --logo-image: url("zygo_head.png");
+    --logo-background: #0C0810;
+    --logo-color: #FFB547;
+  }
+
+  /* Écran de chargement Naïolle : tête qui dodeline dans un anneau lumineux */
+  #zygo {
+    position: absolute; inset: 0; z-index: 10;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 30% 10%, rgba(255,122,61,.35), transparent 55%),
+                radial-gradient(circle at 85% 70%, rgba(217,54,126,.28), transparent 55%), #0C0810;
+    transition: opacity .5s; opacity: 1;
+  }
+  #zygo.off { opacity: 0; pointer-events: none; }
+  .stage { position: relative; width: 300px; height: 300px; }
+  .ring {
+    position: absolute; inset: 0; border-radius: 50%;
+    border: 18px solid transparent;
+    border-top-color: #FFB547; border-right-color: #FF7A3D; border-bottom-color: #D9367E;
+    animation: spin 1.6s linear infinite;
+  }
+  .head {
+    position: absolute; left: 50%; top: 50%; height: 220px;
+    transform-origin: 50% 85%;
+    animation: wobble .7s ease-in-out infinite alternate;
+  }
+  .brand { margin-top: 36px; font-family: ZygoFairy, serif; font-size: 60px; letter-spacing: 8px;
+    background: linear-gradient(90deg,#FFBE50,#FF7A3D,#FF4D6D); -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 14px rgba(255,130,60,.45)); }
+  .title { margin-top: 12px; font-size: 28px; color: #C4ABA1; max-width: 80%; text-align: center; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes wobble {
+    from { transform: translate(-50%, -54%) rotate(-10deg); }
+    to   { transform: translate(-50%, -54%) rotate(10deg); }
+  }
+</style>
+</head>
+<body>
+  <cast-media-player></cast-media-player>
+
+  <div id="zygo">
+    <div class="stage">
+      <div class="ring"></div>
+      <img class="head" src="zygo_head.png" alt="">
+    </div>
+    <div class="brand">NAÏOLLE</div>
+    <div class="title" id="title">Prêt à diffuser</div>
+  </div>
+
+<script>
+  const context = cast.framework.CastReceiverContext.getInstance();
+  const player = context.getPlayerManager();
+  const E = cast.framework.events.EventType;
+  const overlay = document.getElementById('zygo');
+  const title = document.getElementById('title');
+
+  function showLoader(text) {
+    if (text) title.textContent = text;
+    overlay.classList.remove('off');
+  }
+  function hideLoader() { overlay.classList.add('off'); }
+
+  // Récupère le titre au moment du chargement
+  player.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, (request) => {
+    const meta = request.media && request.media.metadata;
+    showLoader(meta && meta.title ? 'Chargement · ' + meta.title : 'Chargement…');
+    return request;
+  });
+
+  player.addEventListener(E.BUFFERING, (e) => { if (e.isBuffering) showLoader(); else hideLoader(); });
+  player.addEventListener(E.PLAYING, hideLoader);
+  player.addEventListener(E.PAUSE, hideLoader);
+  player.addEventListener(E.ERROR, () => showLoader('Impossible de lire ce flux sur la TV'));
+  player.addEventListener(E.MEDIA_FINISHED, () => showLoader('Prêt à diffuser'));
+
+  const options = new cast.framework.CastReceiverOptions();
+  options.disableIdleTimeout = false;
+  options.maxInactivity = 3600;
+  context.start(options);
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Connecter ma TV · Naïolle Player</title>
+<style>
+  :root { --bg:#0C0810; --card:#181017; --line:#3a2430; --text:#FFF3EA; --dim:#C4ABA1; --amber:#FFB547; --coral:#FF6B5B; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; background:radial-gradient(circle at 50% 0%, #3a1430, var(--bg) 70%); color:var(--text);
+         font-family:'Trebuchet MS',Verdana,Arial,sans-serif; display:flex; justify-content:center; padding:24px 16px; }
+  main { width:100%; max-width:420px; text-align:center; }
+  img { width:96px; height:96px; border-radius:50%; border:3px solid var(--amber); background:#2a1630; }
+  h1 { font-size:26px; margin:14px 0 4px; background:linear-gradient(90deg,#FFB547,#FF7A3D,#E85DCB); -webkit-background-clip:text; color:transparent; }
+  p { color:var(--dim); line-height:1.5; margin:8px 0 18px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:22px; padding:22px 18px; text-align:left; }
+  label { display:block; font-size:14px; color:var(--dim); margin-bottom:6px; }
+  input { width:100%; font-size:18px; padding:14px; border-radius:14px; border:1px solid var(--line); background:#0C0810; color:var(--text); }
+  input.code { letter-spacing:10px; text-align:center; font-size:28px; font-weight:bold; color:var(--amber); }
+  button { width:100%; margin-top:14px; font-size:17px; font-weight:bold; padding:15px; border:0; border-radius:16px; color:#2a0f00;
+           background:linear-gradient(90deg,#FFB547,#FF7A3D); cursor:pointer; }
+  button:disabled { opacity:.5; }
+  .msg { margin-top:12px; font-size:14px; min-height:20px; }
+  .err { color:var(--coral); } .ok { color:var(--amber); }
+  .tv { display:inline-block; margin-top:6px; padding:6px 14px; border-radius:12px; border:1px dashed var(--amber); color:var(--amber); font-weight:bold; letter-spacing:4px; }
+  .hidden { display:none; }
+  .done { font-size:56px; }
+</style>
+</head>
+<body>
+<main>
+  <img src="zygo_head.png" alt="Naïolle">
+  <h1>Connecter ma TV</h1>
+  <p>Crée ton compte Naïolle (ou connecte-le) : ta TV se connecte toute seule, sans rien taper avec la télécommande.</p>
+  <div id="tvline"></div>
+  <div class="card" id="step1">
+    <label for="mail">Ton adresse e-mail</label>
+    <input id="mail" type="email" inputmode="email" autocomplete="email" placeholder="toi@exemple.fr">
+    <button id="send">Recevoir mon code</button>
+    <div class="msg" id="m1"></div>
+  </div>
+  <div class="card hidden" id="step2">
+    <label for="otp">Code reçu par e-mail <span id="to"></span></label>
+    <input id="otp" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="······">
+    <button id="verify">Connecter ma TV</button>
+    <div class="msg" style="color:#FFB547;font-weight:bold">📩 Le code arrive souvent dans les SPAMS (courrier indésirable) : regarde là si tu ne le vois pas.</div>
+    <div class="msg" id="m2"></div>
+  </div>
+  <div class="card hidden" id="step3" style="text-align:center">
+    <div class="done">✅</div>
+    <h2>C'est fait !</h2>
+    <p>Ta TV est connectée à ton compte Naïolle. Regarde ton écran : elle s'ouvre toute seule.<br><br>
+       Tu peux aussi installer Naïolle sur ton <b>téléphone Android</b>, avec la même adresse e-mail : tes playlists et tes favoris y seront déjà.</p>
+    <a href="../installer/#telephone" style="display:block;margin-top:14px;padding:16px;border-radius:16px;background:linear-gradient(135deg,#FFB547,#FF7A3D,#D9367E);color:#2A0E00;text-decoration:none;font-weight:bold;font-size:17px">📱 Installer Naïolle sur ce téléphone Android</a>
+    <p style="margin-top:10px;font-size:13px;opacity:.75">Pas encore disponible sur iPhone.</p>
+  </div>
+</main>
+<script>
+const URL_ = "https://anqtxdbawjsibzwfuror.supabase.co";
+const KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFucXR4ZGJhd2pzaWJ6d2Z1cm9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5Njk0NjMsImV4cCI6MjEwODU0NTQ2M30.YRzFHEO0gXFgbB89ux-u1DlCTh_-X-5e8rIZ_CVPwGg";
+const tvCode = (new URLSearchParams(location.search).get("c") || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const $ = (id) => document.getElementById(id);
+if (tvCode.length === 6) $("tvline").innerHTML = 'Code de ta TV : <span class="tv">' + tvCode + '</span><br>' +
+  '<p style="font-size:13px;opacity:.85">🔒 Vérifie que ce code est bien celui affiché <b>sur ta TV, devant toi</b>. ' +
+  'Si quelqu\'un t\'a envoyé ce lien, ne continue pas : il pourrait entrer dans ton compte.</p>';
+else $("m1").innerHTML = '<span class="err">Code de TV manquant : rescanne le QR code affiché sur la TV.</span>';
+let email = "";
+async function call(path, body, token) {
+  const r = await fetch(URL_ + path, { method: "POST",
+    headers: { "Content-Type": "application/json", apikey: KEY, Authorization: "Bearer " + (token || KEY) },
+    body: JSON.stringify(body) });
+  let j = {}; try { j = await r.json(); } catch (e) {}
+  return { ok: r.ok, status: r.status, j };
+}
+$("send").onclick = async () => {
+  email = $("mail").value.trim().toLowerCase();
+  if (!email.includes("@") || !email.includes(".")) { $("m1").innerHTML = '<span class="err">Adresse e-mail incomplète.</span>'; return; }
+  $("send").disabled = true; $("m1").textContent = "Envoi…";
+  const r = await call("/auth/v1/otp", { email, create_user: true });
+  $("send").disabled = false;
+  if (!r.ok) { $("m1").innerHTML = '<span class="err">' + (r.status === 429 ? "Trop de demandes : patiente une minute." : "Envoi impossible, réessaie.") + '</span>'; return; }
+  $("to").textContent = "(" + email + ")"; $("step1").classList.add("hidden"); $("step2").classList.remove("hidden"); $("otp").focus();
+};
+$("verify").onclick = async () => {
+  const token = $("otp").value.replace(/\D/g, "");
+  if (token.length < 6) { $("m2").innerHTML = '<span class="err">Le code fait 6 chiffres.</span>'; return; }
+  $("verify").disabled = true; $("m2").textContent = "Vérification…";
+  const v = await call("/auth/v1/verify", { type: "email", email, token });
+  if (!v.ok || !v.j.access_token) { $("verify").disabled = false; $("m2").innerHTML = '<span class="err">Code invalide ou expiré.</span>'; return; }
+  const a = await call("/functions/v1/zygo-pair", { action: "approve", code: tvCode }, v.j.access_token);
+  $("verify").disabled = false;
+  if (!a.ok) { $("m2").innerHTML = '<span class="err">' + (a.status === 410 ? "Le code de la TV a expiré : rescanne le nouveau QR code." : "Connexion de la TV impossible, réessaie.") + '</span>'; return; }
+  $("step2").classList.add("hidden"); $("step3").classList.remove("hidden");
+};
+</script>
+</body>
+</html>
