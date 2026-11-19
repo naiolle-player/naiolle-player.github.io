@@ -76,6 +76,153 @@
   }
   function hideLoader() { overlay.classList.add('off'); }
 
+  // Dernière vidéo demandée : en direct, si le flux décroche, on la relance tout seul
+  let lastLoad = null;
+  let retries = 0;
+  let retryTimer = null;
+
+  // Récupère le titre au moment du chargement
+  player.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, (request) => {
+    const meta = request.media && request.media.metadata;
+    showLoader(meta && meta.title ? 'Chargement · ' + meta.title : 'Chargement…');
+    // Nouvelle demande du téléphone (pas une relance automatique) : on repart de zéro
+    if (!request.customData || !request.customData.naiolleRetry) { retries = 0; }
+    lastLoad = request;
+    return request;
+  });
+
+  function isLive() {
+    const m = lastLoad && lastLoad.media;
+    return !!m && m.streamType === cast.framework.messages.StreamType.LIVE;
+  }
+
+  // Le direct a décroché (coupure chez le fournisseur, lien qui expire…) : on relance la chaîne,
+  // jusqu'à 8 fois de suite, de plus en plus espacé. La TV ne revient plus sur le logo Cast.
+  function relaunch(why) {
+    if (!lastLoad || !isLive() || retryTimer) return;
+    if (retries >= 8) { showLoader('Le direct ne répond plus : relance la chaîne depuis le téléphone'); return; }
+    retries++;
+    showLoader('Reconnexion au direct…');
+    retryTimer = setTimeout(() => {
+      retryTimer = null;
+      const req = new cast.framework.messages.LoadRequestData();
+      req.media = lastLoad.media;
+      req.autoplay = true;
+      req.customData = { naiolleRetry: true };
+      player.load(req).catch(() => relaunch('load'));
+    }, Math.min(2000 * retries, 10000));
+  }
+
+  player.addEventListener(E.BUFFERING, (e) => { if (e.isBuffering) showLoader(); else hideLoader(); });
+  player.addEventListener(E.PLAYING, () => { hideLoader(); retries = 0; });
+  player.addEventListener(E.PAUSE, hideLoader);
+  player.addEventListener(E.ERROR, () => {
+    if (isLive()) relaunch('error'); else showLoader('Impossible de lire ce flux sur la TV');
+  });
+  // Un direct ne « finit » jamais : s'il s'arrête, c'est une coupure
+  player.addEventListener(E.MEDIA_FINISHED, () => {
+    if (isLive()) relaunch('finished'); else showLoader('Prêt à diffuser');
+  });
+  // Arrêt demandé par le téléphone : on ne relance pas
+  player.setMessageInterceptor(cast.framework.messages.MessageType.STOP, (request) => {
+    lastLoad = null; retries = 0;
+    if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
+    return request;
+  });
+
+  const options = new cast.framework.CastReceiverOptions();
+  // Pas de fermeture automatique pendant une reconnexion (sinon la TV revient sur le logo Cast)
+  options.disableIdleTimeout = true;
+  options.maxInactivity = 3600;
+  // Le lecteur insiste davantage avant d'abandonner un morceau de vidéo ou la liste du direct
+  const playback = new cast.framework.PlaybackConfig();
+  playback.autoResumeDuration = 5;
+  playback.autoResumeNumberOfSegments = 3;
+  playback.manifestRequestHandler = (req) => { req.timeoutInterval = 15000; };
+  playback.segmentRequestHandler = (req) => { req.timeoutInterval = 20000; };
+  options.playbackConfig = playback;
+  options.shakaConfig = {
+    streaming: {
+      retryParameters: { maxAttempts: 6, baseDelay: 1000, backoffFactor: 2, timeout: 20000 },
+      rebufferingGoal: 4,
+      bufferingGoal: 20,
+    },
+    manifest: { retryParameters: { maxAttempts: 6, baseDelay: 1000, backoffFactor: 2, timeout: 15000 } },
+  };
+  context.start(options);
+</script>
+<style>
+  @font-face { font-family: ZygoFairy; src: url("zygo_title_black.ttf"); }
+  @font-face { font-family: ZygoText; src: url("zygo_text.ttf"); }
+  html, body { margin: 0; height: 100%; background: #0C0810; overflow: hidden; font-family: ZygoText, sans-serif; }
+  cast-media-player {
+    --theme-hue: 20;
+    --progress-color: #FF7A3D;
+    --background-color: #0C0810;
+    --splash-image: url("zygo_head.png");
+    --splash-size: 30%;
+    --logo-image: url("zygo_head.png");
+    --logo-background: #0C0810;
+    --logo-color: #FFB547;
+  }
+
+  /* Écran de chargement Naïolle : tête qui dodeline dans un anneau lumineux */
+  #zygo {
+    position: absolute; inset: 0; z-index: 10;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 30% 10%, rgba(255,122,61,.35), transparent 55%),
+                radial-gradient(circle at 85% 70%, rgba(217,54,126,.28), transparent 55%), #0C0810;
+    transition: opacity .5s; opacity: 1;
+  }
+  #zygo.off { opacity: 0; pointer-events: none; }
+  .stage { position: relative; width: 300px; height: 300px; }
+  .ring {
+    position: absolute; inset: 0; border-radius: 50%;
+    border: 18px solid transparent;
+    border-top-color: #FFB547; border-right-color: #FF7A3D; border-bottom-color: #D9367E;
+    animation: spin 1.6s linear infinite;
+  }
+  .head {
+    position: absolute; left: 50%; top: 50%; height: 220px;
+    transform-origin: 50% 85%;
+    animation: wobble .7s ease-in-out infinite alternate;
+  }
+  .brand { margin-top: 36px; font-family: ZygoFairy, serif; font-size: 60px; letter-spacing: 8px;
+    background: linear-gradient(90deg,#FFBE50,#FF7A3D,#FF4D6D); -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 14px rgba(255,130,60,.45)); }
+  .title { margin-top: 12px; font-size: 28px; color: #C4ABA1; max-width: 80%; text-align: center; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes wobble {
+    from { transform: translate(-50%, -54%) rotate(-10deg); }
+    to   { transform: translate(-50%, -54%) rotate(10deg); }
+  }
+</style>
+</head>
+<body>
+  <cast-media-player></cast-media-player>
+
+  <div id="zygo">
+    <div class="stage">
+      <div class="ring"></div>
+      <img class="head" src="zygo_head.png" alt="">
+    </div>
+    <div class="brand">NAÏOLLE</div>
+    <div class="title" id="title">Prêt à diffuser</div>
+  </div>
+
+<script>
+  const context = cast.framework.CastReceiverContext.getInstance();
+  const player = context.getPlayerManager();
+  const E = cast.framework.events.EventType;
+  const overlay = document.getElementById('zygo');
+  const title = document.getElementById('title');
+
+  function showLoader(text) {
+    if (text) title.textContent = text;
+    overlay.classList.remove('off');
+  }
+  function hideLoader() { overlay.classList.add('off'); }
+
   // Récupère le titre au moment du chargement
   player.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, (request) => {
     const meta = request.media && request.media.metadata;
