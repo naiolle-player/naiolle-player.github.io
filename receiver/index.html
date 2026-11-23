@@ -5,29 +5,29 @@
 <title>Naïolle Player</title>
 <script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
 <style>
-  @font-face { font-family: ZygoFairy; src: url("zygo_title_black.ttf"); }
-  @font-face { font-family: ZygoText; src: url("zygo_text.ttf"); }
-  html, body { margin: 0; height: 100%; background: #0C0810; overflow: hidden; font-family: ZygoText, sans-serif; }
+  @font-face { font-family: NaiolleTitle; src: url("naiolle_title.ttf"); }
+  @font-face { font-family: NaiolleText; src: url("naiolle_text.ttf"); }
+  html, body { margin: 0; height: 100%; background: #0C0810; overflow: hidden; font-family: NaiolleText, sans-serif; }
   cast-media-player {
     --theme-hue: 20;
     --progress-color: #FF7A3D;
     --background-color: #0C0810;
-    --splash-image: url("zygo_head.png");
+    --splash-image: url("naiolle_head.png");
     --splash-size: 30%;
-    --logo-image: url("zygo_head.png");
+    --logo-image: url("naiolle_head.png");
     --logo-background: #0C0810;
     --logo-color: #FFB547;
   }
 
   /* Écran de chargement Naïolle : tête qui dodeline dans un anneau lumineux */
-  #zygo {
+  #naiolle {
     position: absolute; inset: 0; z-index: 10;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     background: radial-gradient(circle at 30% 10%, rgba(255,122,61,.35), transparent 55%),
                 radial-gradient(circle at 85% 70%, rgba(217,54,126,.28), transparent 55%), #0C0810;
     transition: opacity .5s; opacity: 1;
   }
-  #zygo.off { opacity: 0; pointer-events: none; }
+  #naiolle.off { opacity: 0; pointer-events: none; }
   .stage { position: relative; width: 300px; height: 300px; }
   .ring {
     position: absolute; inset: 0; border-radius: 50%;
@@ -40,7 +40,7 @@
     transform-origin: 50% 85%;
     animation: wobble .7s ease-in-out infinite alternate;
   }
-  .brand { margin-top: 36px; font-family: ZygoFairy, serif; font-size: 60px; letter-spacing: 8px;
+  .brand { margin-top: 36px; font-family: NaiolleTitle, serif; font-size: 60px; letter-spacing: 8px;
     background: linear-gradient(90deg,#FFBE50,#FF7A3D,#FF4D6D); -webkit-background-clip: text; background-clip: text; color: transparent;
     filter: drop-shadow(0 0 14px rgba(255,130,60,.45)); }
   .title { margin-top: 12px; font-size: 28px; color: #C4ABA1; max-width: 80%; text-align: center; }
@@ -54,10 +54,10 @@
 <body>
   <cast-media-player></cast-media-player>
 
-  <div id="zygo">
+  <div id="naiolle">
     <div class="stage">
       <div class="ring"></div>
-      <img class="head" src="zygo_head.png" alt="">
+      <img class="head" src="naiolle_head.png" alt="">
     </div>
     <div class="brand">NAÏOLLE</div>
     <div class="title" id="title">Prêt à diffuser</div>
@@ -67,7 +67,7 @@
   const context = cast.framework.CastReceiverContext.getInstance();
   const player = context.getPlayerManager();
   const E = cast.framework.events.EventType;
-  const overlay = document.getElementById('zygo');
+  const overlay = document.getElementById("naiolle");
   const title = document.getElementById('title');
 
   function showLoader(text) {
@@ -152,29 +152,29 @@
   context.start(options);
 </script>
 <style>
-  @font-face { font-family: ZygoFairy; src: url("zygo_title_black.ttf"); }
-  @font-face { font-family: ZygoText; src: url("zygo_text.ttf"); }
-  html, body { margin: 0; height: 100%; background: #0C0810; overflow: hidden; font-family: ZygoText, sans-serif; }
+  @font-face { font-family: NaiolleTitle; src: url("naiolle_title.ttf"); }
+  @font-face { font-family: NaiolleText; src: url("naiolle_text.ttf"); }
+  html, body { margin: 0; height: 100%; background: #0C0810; overflow: hidden; font-family: NaiolleText, sans-serif; }
   cast-media-player {
     --theme-hue: 20;
     --progress-color: #FF7A3D;
     --background-color: #0C0810;
-    --splash-image: url("zygo_head.png");
+    --splash-image: url("naiolle_head.png");
     --splash-size: 30%;
-    --logo-image: url("zygo_head.png");
+    --logo-image: url("naiolle_head.png");
     --logo-background: #0C0810;
     --logo-color: #FFB547;
   }
 
   /* Écran de chargement Naïolle : tête qui dodeline dans un anneau lumineux */
-  #zygo {
+  #naiolle {
     position: absolute; inset: 0; z-index: 10;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     background: radial-gradient(circle at 30% 10%, rgba(255,122,61,.35), transparent 55%),
                 radial-gradient(circle at 85% 70%, rgba(217,54,126,.28), transparent 55%), #0C0810;
     transition: opacity .5s; opacity: 1;
   }
-  #zygo.off { opacity: 0; pointer-events: none; }
+  #naiolle.off { opacity: 0; pointer-events: none; }
   .stage { position: relative; width: 300px; height: 300px; }
   .ring {
     position: absolute; inset: 0; border-radius: 50%;
@@ -187,7 +187,7 @@
     transform-origin: 50% 85%;
     animation: wobble .7s ease-in-out infinite alternate;
   }
-  .brand { margin-top: 36px; font-family: ZygoFairy, serif; font-size: 60px; letter-spacing: 8px;
+  .brand { margin-top: 36px; font-family: NaiolleTitle, serif; font-size: 60px; letter-spacing: 8px;
     background: linear-gradient(90deg,#FFBE50,#FF7A3D,#FF4D6D); -webkit-background-clip: text; background-clip: text; color: transparent;
     filter: drop-shadow(0 0 14px rgba(255,130,60,.45)); }
   .title { margin-top: 12px; font-size: 28px; color: #C4ABA1; max-width: 80%; text-align: center; }
@@ -201,10 +201,10 @@
 <body>
   <cast-media-player></cast-media-player>
 
-  <div id="zygo">
+  <div id="naiolle">
     <div class="stage">
       <div class="ring"></div>
-      <img class="head" src="zygo_head.png" alt="">
+      <img class="head" src="naiolle_head.png" alt="">
     </div>
     <div class="brand">NAÏOLLE</div>
     <div class="title" id="title">Prêt à diffuser</div>
@@ -214,7 +214,7 @@
   const context = cast.framework.CastReceiverContext.getInstance();
   const player = context.getPlayerManager();
   const E = cast.framework.events.EventType;
-  const overlay = document.getElementById('zygo');
+  const overlay = document.getElementById("naiolle");
   const title = document.getElementById('title');
 
   function showLoader(text) {
